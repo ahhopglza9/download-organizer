@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>어디에 둘까요</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card" id="popup">
+    <header class="head">
+      <p class="file" id="file-name">새 파일을 기다리는 중</p>
+      <p class="pending" id="pending"></p>
+    </header>
+    <label class="line ask" for="query">어디에 둘까요?</label>
+    <input class="line query" id="query" type="text" autocomplete="off" spellcheck="false"
+           placeholder="예: 세금 서류, 제주 여행 사진" aria-controls="results">
+    <p class="line status" id="status" role="status" aria-live="polite"></p>
+    <ol class="results" id="results" role="listbox" aria-label="추천 폴더"></ol>
+    <button class="line pick" id="pick" type="button">다른 폴더 고르기… <kbd>Ctrl+O</kbd></button>
+    <footer class="line keys">
+      <span><kbd>↑</kbd><kbd>↓</kbd> 고르기</span>
+      <span><kbd>Enter</kbd> 옮기기</span>
+      <span><kbd>Esc</kbd> 다운로드 폴더에 그냥 두기</span>
+    </footer>
+  </main>
+  <main class="card" id="settings" hidden>
+    <header class="head">
+      <p class="file">어느 폴더에서 찾을까요?</p>
+      <p class="pending">체크한 폴더 안에서 이름이 비슷한 폴더를 찾아요</p>
+    </header>
+    <ul class="roots" id="roots" aria-label="찾아볼 폴더"></ul>
+    <button class="line pick" id="add-root" type="button">폴더 추가…</button>
+    <label class="line option"><input type="checkbox" id="autostart"> Windows를 켤 때 자동으로 실행</label>
+    <p class="line option"><span id="memory-count"></span><button class="link" id="clear-memory" type="button">모두 지우기</button></p>
+    <p class="line status" id="settings-status" role="status" aria-live="polite" data-kind="error"></p>
+    <footer class="line actions">
+      <button class="link" id="cancel" type="button">취소</button>
+      <button class="primary" id="save" type="button">저장</button>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

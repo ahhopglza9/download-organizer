@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+.superpowers/
+memory.json
+memory.json.tmp
+app.log
+app.log.old
+.venv/
+docs/
+*.bak*

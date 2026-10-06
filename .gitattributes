@@ -1,0 +1,2 @@
+installer/*.cmd text eol=crlf
+installer/*.ps1 text eol=crlf

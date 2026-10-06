@@ -1,0 +1,13 @@
+[project]
+name = "download-organizer"
+version = "0.1.0"
+description = "다운로드한 파일을 원하는 폴더로 옮겨 주는 Windows 프로그램"
+requires-python = "==3.14.*"
+dependencies = ["watchdog", "pywebview", "pystray", "pillow"]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+package = false
+environments = ["sys_platform == 'win32'"]

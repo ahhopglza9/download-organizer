@@ -1,0 +1,336 @@
+:root {
+  --paper: #FAFCFF;
+  --rule: #D3E1F2;
+  --margin: #E0605A;
+  --ink: #1E2A3B;
+  --ink-soft: #66768C;
+  --marker: #FFE66B;
+  --error: #B8322B;
+  --line: 34px;
+  --gutter: 46px;
+  font-family: "IBM Plex Sans KR", "Malgun Gothic", sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #18202D;
+    --rule: #283650;
+    --margin: #E0605A;
+    --ink: #E6ECF5;
+    --ink-soft: #94A3BA;
+    --marker: rgba(255, 222, 89, 0.28);
+    --error: #FF8A80;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.card {
+  position: relative;
+  min-height: 100%;
+  padding-left: calc(var(--gutter) + 18px);
+  padding-right: 22px;
+  font-size: 15px;
+  /* 파란 가로줄: 머리 부분(68px) 아래부터 34px 간격 */
+  background:
+    linear-gradient(var(--paper), var(--paper)) top / 100% 68px no-repeat,
+    repeating-linear-gradient(to bottom, transparent 0 calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px) var(--line));
+  background-color: var(--paper);
+}
+
+/* 빨간 세로 여백선 */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--gutter);
+  border-left: 1.5px solid var(--margin);
+  opacity: 0.75;
+}
+
+.head {
+  height: 68px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 2px solid var(--margin);
+  margin-left: calc(-1 * (var(--gutter) + 18px));
+  padding-left: calc(var(--gutter) + 18px);
+  margin-right: -22px;
+  padding-right: 22px;
+}
+
+.file {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pending {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--ink-soft);
+}
+
+.pending:empty { display: none; }
+
+.line {
+  display: block;
+  height: var(--line);
+  line-height: calc(var(--line) - 2px);
+}
+
+.ask {
+  color: var(--ink-soft);
+  font-size: 13px;
+  padding-top: 4px;
+}
+
+.query {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  caret-color: var(--margin);
+  outline: none;
+}
+
+.query::placeholder {
+  color: var(--ink-soft);
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.status {
+  font-size: 13px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 오류는 두 줄까지 쓰되, 두 줄 모두 파란 줄 위에 얹히도록 줄 높이를 맞춥니다 */
+.status[data-kind="error"] {
+  color: var(--error);
+  white-space: normal;
+  height: calc(var(--line) * 2);
+  line-height: var(--line);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.status[data-kind="ok"] { color: var(--ink); font-weight: 600; }
+
+.results {
+  list-style: none;
+  height: calc(var(--line) * 5);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  height: var(--line);
+  line-height: calc(var(--line) - 2px);
+  cursor: pointer;
+  margin-left: -8px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.row-name {
+  flex: 0 1 auto;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55%;
+}
+
+.row-where {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+/* 전에 같은 검색어로 고른 폴더 표시 */
+.row-tag {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--margin);
+}
+
+/* 다른 폴더 고르기: 카드 위에 연필로 쓴 듯한 글자 버튼 */
+.pick {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pick:hover,
+.pick:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--margin);
+  text-underline-offset: 4px;
+  outline: none;
+}
+
+.pick kbd {
+  margin-left: 6px;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+/* 선택된 줄: 형광펜으로 그은 것처럼 줄 높이의 가운데만 칠합니다 */
+.row[aria-selected="true"] {
+  background: linear-gradient(to bottom, transparent 18%, var(--marker) 18%, var(--marker) 82%, transparent 82%);
+}
+
+.row:hover:not([aria-selected="true"]) .row-name {
+  text-decoration: underline;
+  text-decoration-color: var(--margin);
+  text-underline-offset: 4px;
+}
+
+.row.moved {
+  transform: translateX(14px);
+  transition: transform 220ms ease-out;
+}
+
+.keys {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+kbd {
+  font: inherit;
+  font-weight: 600;
+  color: var(--ink);
+  margin-right: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row.moved { transform: none; transition: none; }
+}
+
+/* ---- 설정 화면 ---- */
+.roots {
+  list-style: none;
+  height: calc(var(--line) * 5);
+  overflow-y: auto;
+}
+
+.root label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--line);
+  cursor: pointer;
+}
+
+.root-name {
+  flex: 0 0 auto;
+  font-weight: 600;
+}
+
+.root-path {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--ink);
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.link {
+  border: 0;
+  background: transparent;
+  color: var(--margin);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.link:hover,
+.link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+}
+
+.actions .link {
+  margin-left: 0;
+  color: var(--ink-soft);
+}
+
+.primary {
+  border: 0;
+  border-radius: 3px;
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  height: 28px;
+  padding: 0 18px;
+  cursor: pointer;
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--margin);
+  outline-offset: 2px;
+}
